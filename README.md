@@ -3,12 +3,12 @@
 
 In this case study, you will learn how to implement the principles of object-oriented programming by building a simple library management system. The system will allow users to add, view, and manage books in a library. The library management system will have the following functionality:
 
-1.Users can add books to the library.
-2.Users can view a list of books in the library.
-3.Users can search for a book by title, author, or ISBN.
-4.Users can remove a book from the library.
-5.User can filter the books that are issued to students.
-6.User can filter the books by authors.
+1.Users can add books to the library.<br/>
+2.Users can view a list of books in the library.<br/>
+3.Users can search for a book by title, author, or ISBN.<br/>
+4.Users can remove a book from the library.<br/>
+5.User can filter the books that are issued to students.<br/>
+6.User can filter the books by authors.<br/>
 
 The system will be designed using the following classes: Book: Represents a book in the library. Books can have different genres such as Fiction, Philosophy, Religion and each of this type have different attributes and behaviors. 
 
