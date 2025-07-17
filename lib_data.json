@@ -21,10 +21,29 @@
     ],
     "Members": [
         {
-            "name": "ravi"
+            "name": "Rohan",
+            "borrowed_books": [
+                {
+                    "name": "ertey",
+                    "author": "eret",
+                    "publication_year": "3"
+                }
+            ]
         },
         {
-            "name": "shiv"
+            "name": "Tin",
+            "borrowed_books": [
+                {
+                    "name": "ertey",
+                    "author": "eret",
+                    "publication_year": "3"
+                },
+                {
+                    "name": "sdrsdac",
+                    "author": "cgsd",
+                    "publication_year": "656"
+                }
+            ]
         }
     ]
 }

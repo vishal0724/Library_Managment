@@ -41,8 +41,9 @@ class Library:
             # Load members from the JSON file
             for member in data['Members']:
                 new_member = Member(member['name'])
+                new_member.borrowed_books = member['borrowed_books'] if 'borrowed_books' in member else []
                 self.members.append(new_member)
-
+        
         
     def add_book(self, book_name=None, author=None, publication_year=None):
         data = load_data()
@@ -102,7 +103,8 @@ class Library:
         if 'Members' not in data:
             data['Members'] = []
         data['Members'] += [
-            {"name": member_name}
+            {"name": member_name,
+             "borrowed_books": []}  # Initialize borrowed_books as an empty list
         ]
         save_data(data)
         print(f"Member {member_name} added successfully.")
@@ -124,6 +126,8 @@ class Library:
         for book in self.books:
             if book_name.lower() == book.name.lower():
                 print(book.name ,"Found")
+                print("\n  ---- Book Details----\n")
+                print("Name: ", book.name,'\nAuthor: ', book.author, '\nPublication Year: ', book.publication_year)
                 return 
         print(book_name, "is not found.")
         return 
@@ -136,6 +140,43 @@ class Library:
             for book in self.books:
                 print(book.name, "    by ", book.author, "    published in ", book.publication_year)
         return
+
+    def issue_book(self, book_name, member_name):
+        data = load_data()
+        for book in data['Books']:
+            if book['name'].lower() == book_name.lower():
+                for member in data['Members']:
+                    if member['name'].lower() == member_name.lower():
+                        for m in member['borrowed_books']:
+                            if m['name'].lower() == book_name.lower():
+                                print(f"Book '{book_name}' is already issued to {member_name}.")
+                                return
+                        member['borrowed_books'].append(book)
+                        save_data(data)
+                        for m in self.members:
+                            if m.member_name.lower() == member_name.lower():
+                                m.borrowed_books.append(book)
+                        # self.members[self.members.index(Member(member_name))].borrowed_books.append(book)
+                        print(f"Book '{book['name']}' issued to '{member['name']}'.")
+                        return
+                print(f"Member '{member_name}' not available in library list!!")
+                print("Please, first add the member in library system!!")
+                return 
+        print(f"Book '{book_name}' not available in library !!")
+        return
+    
+    def view_borrowed_books(self, member_name):
+        for member in self.members:
+            if member.member_name.lower() == member_name.lower():
+                if not member.borrowed_books:
+                    print(f"No books borrowed by {member_name}.")
+                else:
+                    print(f"\nBooks borrowed by '{member_name}':")
+                    for book in member.borrowed_books:
+                        print(f"-->> {book['name']} by {book['author']} ({book['publication_year']})")
+                return
+
+
 
 
 
@@ -167,6 +208,14 @@ class Member:
         self.member_name = member_name
         self.borrowed_books = []
 
+        data = load_data()
+
+
+    def __str__(self):
+        return self.member_name if self.member_name else "Unknown Member!!"
+    def __repr__(self):
+        return self.__str__()
+
 
 
 
@@ -183,9 +232,11 @@ def main():
         print("6. Remove Member")
         print("7. Search Book")
         print("8. View Book List")
+        print("9. Issue Book")
+        print("10. View Borrowed Books")
         print("0. Exit\n")
 
-        choice = input("Enter your choice: ")
+        choice = str(input("Enter your choice: "))
 
         if choice == "1":
             book_name = input("Enter book name: ")
@@ -208,6 +259,7 @@ def main():
         elif choice == "5":
             author_name = input("Enter author name to remove: ")
             library.remove_author(author_name)
+            
         elif choice == "6":
             member_name = input("Enter member name to remove: ")
             library.remove_member(member_name)
@@ -218,7 +270,16 @@ def main():
         
         elif choice == "8":
             library.book_list()
+
+        elif choice == '9':
+            member_name = input("Enter member name to issue book: ")
+            book_name = input("Enter book name to issue: ")
+            library.issue_book(book_name, member_name)
         
+        elif choice == "10":
+            member_name = input("Enter member name to view borrowed books: ")
+            library.view_borrowed_books(member_name)
+
         elif choice == "0":
             print("Exiting the system.")
             break
